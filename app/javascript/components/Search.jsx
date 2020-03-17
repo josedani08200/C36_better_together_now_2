@@ -1,26 +1,77 @@
 import React, { useState } from "react";
+import SmartSearch from "./SmartSearch";
+import axios from "axios";
+
+// may seem repetitive but sometimes your value won't be the same as your label
+// this is usually true when values are lowered cases or for abbreviations
+const LOCATIONS = [
+  { value: "Miami", label: "Miami" },
+  { value: "New York", label: "New York" }
+];
+
+// same comment as above
+const CATEGORIES = [
+  { value: "Environment", label: "Environment" },
+  { value: "Animals", label: "Animals" }
+];
 
 const Search = () => {
-  const [location, setLocation] = useState("");
-  const [category, setCategory] = useState("");
+  const [location, setLocation] = useState(null);
+  const [category, setCategory] = useState(null);
 
-  const handleSearch = () =>
-    Turbolinks.visit(`/events?category=${category}&location=${location}`);
+  const handleSearch = () => {
+    const queryParams = [
+      ["location", location],
+      ["category", category]
+    ].reduce((acc, [queryName, queryValue]) => {
+      if (!queryValue || !queryValue.value) return acc;
+
+      const query = `${queryName}=${queryValue.value}`;
+      return acc ? `${acc}&${query}` : query;
+    }, "");
+
+    const url = queryParams ? `/events?${queryParams}` : "/events";
+    Turbolinks.visit(url);
+  };
+
+  // please remove if you dont need to load options asynchronously
+  const asyncSelectLoadOptionsExample = async _ => {
+    const { data } = await axios.get("/SOME_URL_FOR_OPTIONS");
+
+    // options for react-select has to be shaped { value, label }[]
+    const options = data.map(item => ({
+      value: item.whateverPropertyYouWantToUseAsValue,
+      label: item.whateverPropertyYouWantToUseAsLabel
+    }));
+
+    return options;
+  };
 
   return (
     <div>
-      <input
+      <SmartSearch
         placeholder="City"
         value={location}
-        className="search_form_city"
-        onChange={e => setLocation(e.target.value)}
+        className="search_form"
+        onChange={setLocation}
+        options={LOCATIONS}
       />
-      <input
+      <SmartSearch
         placeholder="Type of Event"
         value={category}
         className="search_form"
-        onChange={e => setCategory(e.target.value)}
+        onChange={setCategory}
+        options={CATEGORIES}
       />
+      {/* async example in case you wanted to load options from the backend (component is already built to do so) */}
+      {/* 
+      <SmartSearch
+        placeholder="Whatever"
+        value=NEW_STATE_VALUE_HERE
+        className="search_form"
+        onChange=NEW_STATE_SETTER_HERE
+        loadOptions={asyncSelectLoadOptionsExample}
+      /> */}
       <input
         onClick={handleSearch}
         type="submit"
