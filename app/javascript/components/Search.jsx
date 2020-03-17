@@ -23,10 +23,10 @@ const Search = () => {
     const queryParams = [
       ["location", location],
       ["category", category]
-    ].reduce((acc, [queryName, queryValue]) => {
-      if (!queryValue || !queryValue.value) return acc;
+    ].reduce((acc, [queryName, { value }]) => {
+      if (!value) return acc;
 
-      const query = `${queryName}=${queryValue.value}`;
+      const query = `${queryName}=${value}`;
       return acc ? `${acc}&${query}` : query;
     }, "");
 
@@ -66,6 +66,7 @@ const Search = () => {
       {/* async example in case you wanted to load options from the backend (component is already built to do so) */}
       {/* 
       <SmartSearch
+        async
         placeholder="Whatever"
         value=NEW_STATE_VALUE_HERE
         className="search_form"

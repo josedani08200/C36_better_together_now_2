@@ -46,6 +46,7 @@ const SmartSearch = ({
   return (
     <>
       {label && <label>{label}</label>}
+      {/* passing down propsss */}
       <Select
         {...customizeSearch()}
         className={className}
