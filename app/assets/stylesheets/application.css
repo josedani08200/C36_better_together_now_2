@@ -379,3 +379,44 @@ footer {
 .view_button {
   font-size: 12px;
 }
+
+/* modal */
+.modal-header {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  width: 100%;
+}
+.modal-header-top {
+  display: flex;
+  justify-content: space-between;
+  background-color: lightgrey;
+  width: 100%;
+}
+.modal-header-mid {
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+  height: 200px;
+}
+.modal-header-bottom {
+  background-color: lightgrey;
+  width: 100%;
+}
+.modal-content {
+  height: 600px;
+  width: 500px;
+}
+.modal-body {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+}
+.modal-col-1 {
+  width: 50%;
+}
+.modal-col-2 {
+  background-color: lightgrey;
+  padding: 0px;
+  width: 50%;
+}
